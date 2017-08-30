@@ -41,4 +41,9 @@ public class Stack<T> implements IStack<T>{
     public T peek() {
         return elements[headIndex];
     }
+
+    @Override
+    public int size() {
+        return elements.length - headIndex - 1;
+    }
 }
