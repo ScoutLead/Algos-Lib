@@ -15,14 +15,13 @@ public class Stack<T> implements IStack<T>{
 
     public Stack(T [] elements) {
         this.elements = elements;
-        headIndex = elements.length - 1;
+        headIndex = elements.length;
     }
 
 
     public void push(T elem) {
-        if(headIndex >= 0) {
-            elements[headIndex] = elem;
-            headIndex --;
+        if(headIndex > 0) {
+            elements[--headIndex] = elem;
         } else {
             throw new IndexOutOfBoundsException("You can not push in full stack");
         }
@@ -39,11 +38,15 @@ public class Stack<T> implements IStack<T>{
     }
 
     public T peek() {
-        return elements[headIndex];
+        if(headIndex < elements.length) {
+            return elements[headIndex];
+        } else {
+            throw new IndexOutOfBoundsException("You can not peek from empty stack");
+        }
     }
 
     @Override
     public int size() {
-        return elements.length - headIndex - 1;
+        return elements.length - headIndex;
     }
 }
