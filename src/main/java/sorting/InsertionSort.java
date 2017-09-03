@@ -1,6 +1,6 @@
 package sorting;
 
-public class SelectionSort {
+public class InsertionSort {
     public static <T extends Comparable<T>> T []  sort (T [] array) {
         for(int j = 1; j < array.length; j++) {
             T key = array[j];
