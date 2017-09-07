@@ -10,25 +10,38 @@ public class LinkedList<T> implements IStack<T> {
         int currentIndex = 0;
         if(isEmpty()) {
             first = new Node<>(value, null);
+            size ++;
         } else if(index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("You can not insert element after element with non-existent index " + index);
         } else {
             Node<T> parent = null;
             Node<T> current = first;
-            while(current.hasNext()) {
-                if(index == currentIndex) {
-                    Node<T> newValue = new Node<>(value, current);
-                    current = newValue;
-                    if(parent != null) {
-                        parent.setNext(current);
+
+            if(index == 0) {
+                Node<T> newValue = new Node<>(value, current);
+                first = newValue;
+            } else {
+                while(current.hasNext()) {
+                    if(index == currentIndex) {
+                        Node<T> newValue = new Node<>(value, current);
+                        current = newValue;
+                        if(parent != null) {
+                            parent.setNext(current);
+                        }
+                        break;
                     }
+                    parent = current;
+                    current = current.getNext();
+                    currentIndex++;
                 }
-                parent = current;
-                current = current.getNext();
-                currentIndex++;
+
+                if(index == size() - 1) {
+                    parent.setNext(new Node<>(value, current));
+                }
             }
+            size ++;
+
         }
-        size ++;
 
     }
 
@@ -53,23 +66,30 @@ public class LinkedList<T> implements IStack<T> {
         if(isEmpty()) {
             throw new NullPointerException("List is empty. You cannot remove in empty list");
         } else if(index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("You can not remove element element with non-existent index " + index);
         } else {
             Node<T> parent = null;
             Node<T> current = first;
-            while(current.hasNext()) {
-                if(index == currentIndex) {
-                    Node<T> next = current.getNext();
-                    current = next;
-                    if(parent != null) {
-                        parent.setNext(current);
+            if(currentIndex == index) {
+                Node<T> next = current.getNext();
+                first = next;
+            } else {
+                while(current.hasNext()) {
+                    if(index == currentIndex) {
+                        Node<T> next = current.getNext();
+                        current = next;
+                        if(parent != null) {
+                            parent.setNext(current);
+                        }
+                        break;
                     }
-                }
-                parent = current;
-                current = current.getNext();
+                    parent = current;
+                    current = current.getNext();
 
-                currentIndex++;
+                    currentIndex++;
+                }
             }
+
         }
         size --;
 
@@ -80,7 +100,7 @@ public class LinkedList<T> implements IStack<T> {
         if(isEmpty()) {
             throw new NullPointerException("List is empty. You cannot get from empty list");
         } else if(index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("You can not get element with index " + index);
         } else {
             Node<T> current = first;
             while(current.hasNext()) {
@@ -89,6 +109,9 @@ public class LinkedList<T> implements IStack<T> {
                 }
                 current = current.getNext();
                 currentIndex++;
+            }
+            if(index == currentIndex) {
+                return current.getValue();
             }
         }
         return null;
